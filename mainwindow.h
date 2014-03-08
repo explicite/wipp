@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QWidget>
+#include "kolmogorovzurbenko.h"
 #include "qcustomplot.h"
 #include "parser.h"
 #include "tab.h"

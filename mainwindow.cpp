@@ -58,7 +58,7 @@ void MainWindow::loadFile()
 
                 QVector<double> x, y;
                 x = p.getX();
-                y = p.getY();
+                y = KolmogorovZurbenko::Filter(&p.getY(), 3);
 
                 double* maxX = std::max_element(std::begin(x), std::end(x));
                 double* maxY = std::max_element(std::begin(y), std::end(y));
