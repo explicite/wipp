@@ -19,12 +19,17 @@ SOURCES += main.cpp\
     qcustomplot.cpp \
     parser.cpp \
     tab.cpp \
-    kolmogorovzurbenko.cpp
+    kolmogorovzurbenko.cpp \
+    gwo.cpp \
+    function.cpp
 
 HEADERS  += mainwindow.h \
     qcustomplot.h \
     parser.h \
     tab.h \
-    kolmogorovzurbenko.h
+    kolmogorovzurbenko.h \
+    gwo.h \
+    function.h \
+    optimum.h
 
 FORMS    += mainwindow.ui

@@ -8,6 +8,7 @@
 #include "qcustomplot.h"
 #include "parser.h"
 #include "tab.h"
+#include "gwo.h"
 
 namespace Ui {
 class MainWindow;

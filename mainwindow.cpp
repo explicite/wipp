@@ -22,7 +22,7 @@ void MainWindow::closeTab(const int& index)
     QWidget* tabItem = ui->tabWidget->widget(index);
     ui->tabWidget->removeTab(index);
     tabs[index].clean();
-    delete(tabItem);
+    delete tabItem;
     tabItem = nullptr;
 }
 
