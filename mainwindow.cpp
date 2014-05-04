@@ -48,17 +48,19 @@ void MainWindow::loadFile()
             tr("All files (*.*);;Documents (*.txt)") );
         if( !filenames.isEmpty() )
         {
+            #pragma omp parallel for
             for(int i = 0; i < filenames.size(); ++i){
                 std::vector<int> v;
                 v.push_back(1);
 
                 parser p(filenames[i]);
+
                 QCustomPlot* cplot = new QCustomPlot();
                 cplot->addGraph();
 
                 QVector<double> x, y;
-                x = p.getX();
-                y = KolmogorovZurbenko::Filter(&p.getY(), 3);
+                x = p.getJaw();
+                y = KolmogorovZurbenko::Filter(&p.getForce(), 5);
 
                 double* maxX = std::max_element(std::begin(x), std::end(x));
                 double* maxY = std::max_element(std::begin(y), std::end(y));

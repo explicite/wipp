@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "tab.h"
 #include "gwo.h"
+#include "omp.h"
 
 namespace Ui {
 class MainWindow;

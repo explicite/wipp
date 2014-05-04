@@ -12,14 +12,24 @@
 class parser
 {
 public:
-    QVector<double> getX();
-    QVector<double> getY();
+
+    QVector<double> getTime();
+    QVector<double> getForce();
+    QVector<double> getJaw();
+    QVector<double> getPTemp();
+    QVector<double> getStrain();
+    QVector<double> getStress();
+    QVector<double> getStroke();
+    QVector<double> getTC1();
+    QVector<double> getTC2();
+
     parser(QString);
     parser(void);
     ~parser(void);
 private:
+
     QFile* file;
-    QVector<double> x, y;
+    QVector<double> time, force, jaw, ptemp, strain, stress, stroke, tc1, tc2;
 
 };
 

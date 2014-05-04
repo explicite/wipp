@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 class Function
 {
@@ -27,4 +28,7 @@ public:
     double (*val)(double*);
 };
 
+
+
+double hanselSpittel(double*);
 #endif // FUNCTION_H

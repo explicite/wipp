@@ -1,13 +1,38 @@
 #include "parser.h"
 
-QVector<double> parser::getX()
+QVector<double> parser::getTime()
 {
-    return x;
+    return time;
 }
 
-QVector<double> parser::getY()
+QVector<double> parser::getForce()
 {
-    return y;
+    return force;
+}
+
+QVector<double> parser::getJaw()
+{
+    return jaw;
+}
+
+QVector<double> parser::getPTemp()
+{
+    return ptemp;
+}
+
+QVector<double> parser::getStrain()
+{
+    return strain;
+}
+
+QVector<double> parser::getTC1()
+{
+    return tc1;
+}
+
+QVector<double> parser::getTC2()
+{
+    return tc2;
 }
 
 parser::parser(QString filename)
@@ -20,15 +45,20 @@ parser::parser(QString filename)
 
         while ( !in.atEnd() )
         {
-            QString line = in.readLine();
+            line = in.readLine();
             QStringList tokens = line.split(QRegExp("(\\s+)"), QString::SkipEmptyParts);
 
-            for(int i = 0; i < tokens.size(); i++){
-                if(i == 2){
-                    x.append(-1*tokens[i].toDouble());
-                }else if(i == 1){
-                    y.append(-1*tokens[i].toDouble());
-                }
+            if(-1*tokens[2].toDouble()>=0)
+            {
+                time.append(-1*tokens[0].toDouble());
+                force.append(-1*tokens[1].toDouble());
+                jaw.append(-1*tokens[2].toDouble());
+                ptemp.append(-1*tokens[3].toDouble());
+                strain.append(-1*tokens[4].toDouble());
+                stress.append(-1*tokens[5].toDouble());
+                stroke.append(-1*tokens[6].toDouble());
+                tc1.append(-1*tokens[7].toDouble());
+                tc2.append(-1*tokens[8].toDouble());
             }
         }
     }
