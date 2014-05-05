@@ -1,15 +1,15 @@
 #include "kolmogorovzurbenko.h"
 
-QVector<double> KolmogorovZurbenko::Filter(const QVector<double> *xs, int k)
+QVector<double> KolmogorovZurbenko::Filter(const QVector<double> *xs, const QVector<double> *ys, int k)
 {
-    QVector<double> derivative = KolmogorovZurbenko::derivative(xs);
+    QVector<double> derivative = KolmogorovZurbenko::derivative(ys, xs);
 
-    QVector<double> *tmp = new QVector<double>(*xs);
-    QVector<double> *ans = new QVector<double>(xs->length());
+    QVector<double> *tmp = new QVector<double>(*ys);
+    QVector<double> *ans = new QVector<double>(ys->length());
     ans->fill(0.0);
     for(int x = 0; x < k; x++){
-        for(int i = 0; i < xs->length(); i++){
-            ans->operator [](i) = mavg1d(tmp, i, abs(window(&derivative, i)));
+        for(int i = 0; i < ys->length(); i++){
+            ans->operator [](i) = mavg1d(tmp, i, window(&derivative, i));
         }
         ans->swap(*tmp);
     }
@@ -34,31 +34,33 @@ double KolmogorovZurbenko::mavg1d(QVector<double> *v, int col, int w)
     return s / ((double)(endcol - startcol));
 }
 
-QVector<double> KolmogorovZurbenko::derivative(const QVector<double> *xs)
+QVector<double> KolmogorovZurbenko::derivative(const QVector<double> *xs, const QVector<double> *ys)
 {
     QVector<double> derivative;
-    double h = (xs->last() - xs->first()) / xs->size();
+    double max = 0;
 
-    //first point
-    derivative.append((xs->operator [](3)-(3*xs->operator [](2))+(3*xs->operator [](1))-xs->operator [](0))/(h*h*h));
+    for(int y = 0; y < ys->length()-2; y++){
+        double h = abs((xs->operator [](y+2) - xs->operator [](y)) / 3);
+        double y0 = ys->operator [](y);
+        double y1 = ys->operator [](y+1);
+        double y2 = ys->operator [](y+2);
 
-    //second point
-    derivative.append((xs->operator [](4)-(3*xs->operator [](3))+(3*xs->operator [](2))-xs->operator [](1))/(h*h*h));
+        double deriv = (y2-(2*y1)+y0)/(h*h);
+        derivative.append(deriv);
 
+        if(abs(deriv) > max && abs(deriv) != std::numeric_limits<double>::infinity())
+            max = abs(deriv);
 
-    for(int x = 2; x < xs->length()-2; x++){
-        double x0 = xs->operator [](x-2);
-        double x1 = xs->operator [](x-1);
-        double x2 = xs->operator [](x+1);
-        double x3 = xs->operator [](x+2);
-        derivative.append((x0-(8*x1)+(8*x2)-x3)/(12*h));
     }
 
     //n - 1
-    derivative.append((xs->operator [](xs->length()-2) - (3*xs->operator [](xs->length()-3)) + (3*xs->operator [](xs->length()-4)) - xs->operator [](xs->length()-5))/(h*h*h));
+    derivative.append(derivative.last());
 
     //n
-    derivative.append((xs->operator [](xs->length()-1) - (3*xs->operator [](xs->length()-2)) + (3*xs->operator [](xs->length()-3)) - xs->operator [](xs->length()-4))/(h*h*h));
+    derivative.append(derivative.last());
+
+    for(int i = 0; i < derivative.length(); i++)
+        derivative[i]= derivative[i]/max;
 
 
     return derivative;
@@ -66,5 +68,5 @@ QVector<double> KolmogorovZurbenko::derivative(const QVector<double> *xs)
 
 int KolmogorovZurbenko::window(QVector<double> *derivative, int index)
 {
-    return derivative->operator [](index)/20;
+    return abs(derivative->operator [](index))/000000.1;
 }

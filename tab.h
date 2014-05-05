@@ -9,12 +9,10 @@ public:
     tab();
     tab(QVector<double>*, QVector<double>*);
     void clean();
-    void setRect(QPointF*, QCPAbstractPlottable*);
     QVector<QPoint>* getPoints();
 private:
     QVector<double>* x;
     QVector<double>* y;
-    QCPItemRect* rect;
     double minY;
     double maxY;
 };

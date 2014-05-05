@@ -1,14 +1,4 @@
 #include "tab.h"
-void tab::setRect(QPointF* pointf, QCPAbstractPlottable* abstractPlottable)
-{
-    abstractPlottable->parentPlot()->clearItems();
-    rect = new QCPItemRect(abstractPlottable->parentPlot());
-    abstractPlottable->parentPlot()->addItem(rect);
-    rect->topLeft->setCoords(0, (int) minY);
-    QPointF* p = new QPointF(pointf->rx(),(int) abstractPlottable->parentPlot()->yAxis->coordToPixel(maxY));
-    rect->bottomRight->setPixelPoint(*p);
-}
-
 QVector<QPoint>* tab::getPoints()
 {
     return NULL;
@@ -27,7 +17,6 @@ tab::tab()
 {
     this->x = nullptr;
     this->y = nullptr;
-    this->rect = nullptr;
     this->minY = 0;
     this->maxY = 0;
 }
@@ -36,7 +25,6 @@ void tab::clean()
 {
     this->x = nullptr;
     this->y = nullptr;
-    this->rect = nullptr;
     this->minY = 0;
     this->maxY = 0;
 }

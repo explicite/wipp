@@ -8,12 +8,13 @@
 class KolmogorovZurbenko
 {
 public:
-    static QVector<double> Filter(const QVector<double>*, int);
+    static QVector<double> Filter(const QVector<double>*, const QVector<double>*, int);
+    static QVector<double> derivative(const QVector<double>*, const QVector<double>*);
 
 private:
     static double mavg1d(QVector<double>* , int, int);
     static int window(QVector<double>*, int);
-    static QVector<double> derivative(const QVector<double>*);
+
 
 };
 

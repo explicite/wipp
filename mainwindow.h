@@ -27,7 +27,6 @@ private slots:
     void closeTab(const int&);
     void addTab(QString, QWidget*);
     void loadFile();
-    void press(QCPAbstractPlottable*, QMouseEvent*);
 
 private:
     Ui::MainWindow *ui;

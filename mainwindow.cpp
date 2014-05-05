@@ -57,10 +57,15 @@ void MainWindow::loadFile()
 
                 QCustomPlot* cplot = new QCustomPlot();
                 cplot->addGraph();
+                cplot->addGraph();
+                cplot->graph(0)->setPen(QPen(Qt::blue));
+                cplot->graph(1)->setPen(QPen(Qt::yellow));
 
-                QVector<double> x, y;
+                QVector<double> x, y, yFiltered;
                 x = p.getJaw();
-                y = KolmogorovZurbenko::Filter(&p.getForce(), 5);
+                y = p.getForce();
+
+                yFiltered = KolmogorovZurbenko::Filter(&p.getJaw(), &p.getForce(), 5);
 
                 double* maxX = std::max_element(std::begin(x), std::end(x));
                 double* maxY = std::max_element(std::begin(y), std::end(y));
@@ -68,6 +73,7 @@ void MainWindow::loadFile()
                 double* minY = std::min_element(std::begin(y), std::end(y));
 
                 cplot->graph(0)->setData(x,y);
+                cplot->graph(1)->setData(x, yFiltered);
                 cplot->xAxis->setLabel("Jaw(mm)");
                 cplot->yAxis->setLabel("Force(kgf)");
                 cplot->xAxis->setRange(*minX, *maxX);
@@ -77,7 +83,6 @@ void MainWindow::loadFile()
 
                 cplot->replot();
 
-                connect(cplot,SIGNAL(plottableClick(QCPAbstractPlottable*, QMouseEvent*)),this, SLOT(press(QCPAbstractPlottable*, QMouseEvent*)));
                 QWidget* plot = cplot;
                 addTab(filenames[i], plot);
                 tab t =  tab(&x,&y);
@@ -89,11 +94,4 @@ void MainWindow::loadFile()
 void MainWindow::tabClean()
 {
     ui->tabWidget->clear();
-}
-
-void MainWindow::press(QCPAbstractPlottable* abstractPlottable , QMouseEvent* event)
-{
-    QPoint p = this->mapFromGlobal(QCursor::pos());
-    QPointF* pointf = &(event->posF());
-    tabs[ui->tabWidget->currentIndex()].setRect(pointf, abstractPlottable);
 }

@@ -63,8 +63,8 @@ QVector<double> *GWO::optimize(enum Optimum optimum, unsigned int numberOfWolfs,
             double a = 2.0 - iteration * (2.0 / numberOfIterations);
 
             #pragma omp parallel for
-            for(unsigned int i = 0; i < numberOfWolfs; i++){
-                for(unsigned int j = 0; j < function->size; j++){
+            for(int i = 0; i < numberOfWolfs; i++){
+                for(int j = 0; j < function->size; j++){
                     double alpha 	= abs((2.0*nextRandom(0.0, 1.0))*alphaPosition[j] - pack[i][j]);
                     double x1 		= alphaPosition[j] - ((2.0*a*nextRandom(0.0, 1.0)) - 1.0) * alpha;
 
@@ -91,12 +91,12 @@ double **GWO::generatePack(unsigned int numberOfWolfs)
 {
     double **pack = (double**) malloc(numberOfWolfs*sizeof(double));
     #pragma omp parallel for
-    for(unsigned int x = 0; x < numberOfWolfs; x++)
+    for(int x = 0; x < numberOfWolfs; x++)
         pack[x] = (double*) malloc(this->function->size*sizeof(double));
 
     #pragma omp parallel for
-    for(unsigned int x = 0; x < numberOfWolfs; x++)
-            for(unsigned int y = 0; y < this->function->size; y++)
+    for(int x = 0; x < numberOfWolfs; x++)
+            for(int y = 0; y < this->function->size; y++)
                 pack[x][y] = nextRandom(this->function->bounds[y*2], this->function->bounds[(y*2)+1]);
 
     return pack;
@@ -105,8 +105,8 @@ double **GWO::generatePack(unsigned int numberOfWolfs)
 void GWO::backToSpace(double **pack, unsigned int numberOfWolfs)
 {
     #pragma omp parallel for
-    for(unsigned int x = 0; x < numberOfWolfs; x++)
-        for(unsigned int y = 0; y < this->function->size; y++)
+    for(int x = 0; x < numberOfWolfs; x++)
+        for(int y = 0; y < this->function->size; y++)
             if(pack[x][y] >= this->function->bounds[(y*2)+1] || pack[x][y] <= this->function->bounds[(y*2)])
                 pack[x][y] = nextRandom(this->function->bounds[y*2], this->function->bounds[(y*2)+1]);
 }
