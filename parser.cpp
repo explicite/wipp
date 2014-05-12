@@ -74,7 +74,7 @@ parser::parser(QString filename)
     for(int i = 0; i < force.size(); i++) {
         if(force[i] == max) {
             time.remove(i + 1, time.size() - i - 1);
-            force.remove(i + 1, time.size() - i - 1);
+            force.remove(i + 1, force.size() - i - 1);
             jaw.remove(i + 1, jaw.size() - i - 1);
             ptemp.remove(i + 1, ptemp.size() - i - 1);
             strain.remove(i + 1, strain.size() - i - 1);
@@ -84,8 +84,7 @@ parser::parser(QString filename)
             tc2.remove(i + 1, tc2.size() - i - 1);
             break;
         }
-    }
-
+    } 
     // squize vectors
     time.squeeze();
     force.squeeze();
@@ -96,7 +95,43 @@ parser::parser(QString filename)
     tc1.squeeze();
     tc2.squeeze();
 
+    double avgDerivative = 0;
+    // TODO: find
+    int start = force.size()*0.7;
+    int stop =  force.size()*0.71;
+    for(int i = start; i < stop ; i++) {
+        if(force[i+1] > force[i])
+            avgDerivative += abs((force[i+1] - force[i])/2);
+        else
+            avgDerivative += abs((force[i] - force[i+1])/2);
+    }
+    avgDerivative = avgDerivative/(stop - start);
+
+    int maxIndex = 0;
+    for(int i = 0; i < force.size()*0.5; i++) {
+        double deriv;
+        if(force[i+1] > force[i])
+            deriv = abs((force[i+1] - force[i])/2);
+        else
+            deriv = abs((force[i] - force[i+1])/2);
+
+        if(deriv > avgDerivative*avgDerivative){
+            maxIndex = i;
+        }
+    }
+
     // TODO: cut begining on the function
+    for(int i = 0; i < maxIndex; i++) {
+        time.pop_front();
+        force.pop_front();
+        jaw.pop_front();
+        ptemp.pop_front();
+        strain.pop_front();
+        stroke.pop_front();
+        tc1.pop_front();
+        tc2.pop_front();
+    }
+
 }
 
 parser::parser()
