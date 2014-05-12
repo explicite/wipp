@@ -13,15 +13,15 @@ class parser
 {
 public:
 
-    QVector<double> getTime();
-    QVector<double> getForce();
-    QVector<double> getJaw();
-    QVector<double> getPTemp();
-    QVector<double> getStrain();
-    QVector<double> getStress();
-    QVector<double> getStroke();
-    QVector<double> getTC1();
-    QVector<double> getTC2();
+    QVector<double> *getTime();
+    QVector<double> *getForce();
+    QVector<double> *getJaw();
+    QVector<double> *getPTemp();
+    QVector<double> *getStrain();
+    QVector<double> *getStress();
+    QVector<double> *getStroke();
+    QVector<double> *getTC1();
+    QVector<double> *getTC2();
 
     parser(QString);
     parser(void);

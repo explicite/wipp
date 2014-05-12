@@ -2,7 +2,7 @@
 
 Function& Function::operator=(const Function& that)
 {
-    Function::Function(that);
+    new Function(that);
     return *this;
 }
 

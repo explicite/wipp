@@ -61,23 +61,23 @@ void MainWindow::loadFile()
                 cplot->graph(0)->setPen(QPen(Qt::blue));
                 cplot->graph(1)->setPen(QPen(Qt::yellow));
 
-                QVector<double> x, y, yFiltered;
+                QVector<double> *x, *y, *yFiltered;
                 x = p.getJaw();
                 y = p.getForce();
 
-                yFiltered = KolmogorovZurbenko::Filter(&p.getJaw(), &p.getForce(), 5);
+                yFiltered = KolmogorovZurbenko::Filter(p.getJaw(), p.getForce(), 100);
 
-                double* maxX = std::max_element(std::begin(x), std::end(x));
-                double* maxY = std::max_element(std::begin(y), std::end(y));
-                double* minX = std::min_element(std::begin(x), std::end(x));
-                double* minY = std::min_element(std::begin(y), std::end(y));
+                double maxX = *std::max_element(std::begin(*x), std::end(*x));
+                double maxY = *std::max_element(std::begin(*y), std::end(*y));
+                double minX = *std::min_element(std::begin(*x), std::end(*x));
+                double minY = *std::min_element(std::begin(*y), std::end(*y));
 
-                cplot->graph(0)->setData(x,y);
-                cplot->graph(1)->setData(x, yFiltered);
+                cplot->graph(0)->setData(*x, *y);
+                cplot->graph(1)->setData(*x, *yFiltered);
                 cplot->xAxis->setLabel("Jaw(mm)");
                 cplot->yAxis->setLabel("Force(kgf)");
-                cplot->xAxis->setRange(*minX, *maxX);
-                cplot->yAxis->setRange(*minY, *maxY);
+                cplot->xAxis->setRange(minX, maxX);
+                cplot->yAxis->setRange(minY, maxY);
                 cplot->setInteraction(QCP::iRangeDrag, true);
                 cplot->setInteraction(QCP::iRangeZoom, true);
 
@@ -85,7 +85,7 @@ void MainWindow::loadFile()
 
                 QWidget* plot = cplot;
                 addTab(filenames[i], plot);
-                tab t =  tab(&x,&y);
+                tab t =  tab(x,y);
                 tabs.append(t);
             }
         }

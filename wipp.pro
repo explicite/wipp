@@ -6,33 +6,33 @@
 
 CONFIG += c++11
 
-QMAKE_CXXFLAGS+= -openmp
-QMAKE_LFLAGS +=  -openmp
+QMAKE_CXXFLAGS  += -openmp -std=c++0x
+QMAKE_LFLAGS    += -openmp -std=c++0x
 
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT +=  widgets printsupport
 
-TARGET = wipp
-TEMPLATE = app
+TARGET      = wipp
+TEMPLATE    = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    qcustomplot.cpp \
-    parser.cpp \
-    tab.cpp \
-    kolmogorovzurbenko.cpp \
-    gwo.cpp \
-    function.cpp
+SOURCES  += main.cpp \
+            mainwindow.cpp \
+            qcustomplot.cpp \
+            parser.cpp \
+            tab.cpp \
+            kolmogorovzurbenko.cpp \
+            gwo.cpp \
+            function.cpp
 
 HEADERS  += mainwindow.h \
-    qcustomplot.h \
-    parser.h \
-    tab.h \
-    kolmogorovzurbenko.h \
-    gwo.h \
-    function.h \
-    optimum.h
+            qcustomplot.h \
+            parser.h \
+            tab.h \
+            kolmogorovzurbenko.h \
+            gwo.h \
+            function.h \
+            optimum.h
 
 FORMS    += mainwindow.ui

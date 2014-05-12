@@ -14,25 +14,25 @@ QVector<double> *GWO::max(unsigned int numberOfWolfs, unsigned int numberOfItera
 QVector<double> *GWO::optimize(enum Optimum optimum, unsigned int numberOfWolfs, unsigned int numberOfIterations)
 {
     srand(time(NULL));
-    double INFINITY = std::numeric_limits<double>::infinity();
+    double Infinity = std::numeric_limits<double>::infinity();
 
     switch(optimum)
     {
     case MIN:
         break;
     case MAX:
-        INFINITY = -INFINITY;
+        Infinity = -Infinity;
         break;
     }
 
     double *alphaPosition 	= (double*) calloc(function->size, sizeof(double));
-    double 	alphaScore		= INFINITY;
+    double 	alphaScore		= Infinity;
 
     double *betaPosition 	= (double*) calloc(function->size, sizeof(double));
-    double 	betaScore		= INFINITY;
+    double 	betaScore		= Infinity;
 
     double *deltaPosition 	= (double*) calloc(function->size, sizeof(double));
-    double  deltaScore		= INFINITY;
+    double  deltaScore		= Infinity;
 
     double **pack           = generatePack(numberOfWolfs);
 

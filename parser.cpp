@@ -1,43 +1,44 @@
 #include "parser.h"
 
-QVector<double> parser::getTime()
+QVector<double> *parser::getTime()
 {
-    return time;
+    return &time;
 }
 
-QVector<double> parser::getForce()
+QVector<double> *parser::getForce()
 {
-    return force;
+    return &force;
 }
 
-QVector<double> parser::getJaw()
+QVector<double> *parser::getJaw()
 {
-    return jaw;
+    return &jaw;
 }
 
-QVector<double> parser::getPTemp()
+QVector<double> *parser::getPTemp()
 {
-    return ptemp;
+    return &ptemp;
 }
 
-QVector<double> parser::getStrain()
+QVector<double> *parser::getStrain()
 {
-    return strain;
+    return &strain;
 }
 
-QVector<double> parser::getTC1()
+QVector<double> *parser::getTC1()
 {
-    return tc1;
+    return &tc1;
 }
 
-QVector<double> parser::getTC2()
+QVector<double> *parser::getTC2()
 {
-    return tc2;
+    return &tc2;
 }
 
 parser::parser(QString filename)
 {
     file = new QFile(filename);
+
     if(file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream in(file);
@@ -59,11 +60,43 @@ parser::parser(QString filename)
                 stroke.append(-1*tokens[6].toDouble());
                 tc1.append(-1*tokens[7].toDouble());
                 tc2.append(-1*tokens[8].toDouble());
+
             }
         }
     }
 
+
     file->close();
+
+    double max = *std::max_element(std::begin(force), std::end(force));
+
+    // cut end of the function
+    for(int i = 0; i < force.size(); i++) {
+        if(force[i] == max) {
+            time.remove(i + 1, time.size() - i - 1);
+            force.remove(i + 1, time.size() - i - 1);
+            jaw.remove(i + 1, jaw.size() - i - 1);
+            ptemp.remove(i + 1, ptemp.size() - i - 1);
+            strain.remove(i + 1, strain.size() - i - 1);
+            stress.remove(i + 1, stress.size() - i - 1);
+            stroke.remove(i + 1, stroke.size() - i - 1);
+            tc1.remove(i + 1, tc1.size() - i - 1);
+            tc2.remove(i + 1, tc2.size() - i - 1);
+            break;
+        }
+    }
+
+    // squize vectors
+    time.squeeze();
+    force.squeeze();
+    jaw.squeeze();
+    ptemp.squeeze();
+    strain.squeeze();
+    stroke.squeeze();
+    tc1.squeeze();
+    tc2.squeeze();
+
+    // TODO: cut begining on the function
 }
 
 parser::parser()
