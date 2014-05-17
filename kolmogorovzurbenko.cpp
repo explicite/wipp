@@ -7,7 +7,7 @@ QVector<double>* KolmogorovZurbenko::Filter(const QVector<double> *xs, const QVe
     ans->fill(0.0);
     for(int x = 0; x < k; x++){
         for(int i = 0; i < ys->size(); i++){
-            ans->operator [](i) = mavg1d(tmp, i, 5);
+            ans->operator [](i) = mavg1d(tmp, i, (5 / (k / (x + 1))));
         }
         ans->swap(*tmp);
     }

@@ -24,7 +24,8 @@ SOURCES  += main.cpp \
             tab.cpp \
             kolmogorovzurbenko.cpp \
             gwo.cpp \
-            function.cpp
+            function.cpp \
+            bsplain.cpp
 
 HEADERS  += mainwindow.h \
             qcustomplot.h \
@@ -33,6 +34,7 @@ HEADERS  += mainwindow.h \
             kolmogorovzurbenko.h \
             gwo.h \
             function.h \
-            optimum.h
+            optimum.h \
+            bsplain.h
 
 FORMS    += mainwindow.ui

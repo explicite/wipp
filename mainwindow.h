@@ -7,6 +7,7 @@
 #include <QWidget>
 #include "kolmogorovzurbenko.h"
 #include "qcustomplot.h"
+#include "bsplain.h"
 #include "parser.h"
 #include "tab.h"
 #include "gwo.h"
