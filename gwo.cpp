@@ -39,7 +39,6 @@ QVector<double> *GWO::optimize(enum Optimum optimum, unsigned int numberOfWolfs,
 
     for(unsigned int iteration = 0; iteration < numberOfIterations; iteration++){
             for(unsigned int wolf = 0; wolf < numberOfWolfs; wolf++){
-                //Return back the search agents that go beyond the boundaries of the search space
                 backToSpace(pack, numberOfWolfs);
 
                 double fitness = function->val(pack[wolf]);

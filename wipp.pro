@@ -1,13 +1,7 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-08-09T21:07:23
-#
-#-------------------------------------------------
-
 CONFIG += c++11
 
-QMAKE_CXXFLAGS  += -openmp -std=c++0x
-QMAKE_LFLAGS    += -openmp -std=c++0x
+QMAKE_CXXFLAGS  += -fopenmp -std=c++0x
+QMAKE_LFLAGS    += -fopenmp -std=c++0x
 
 QT       += core gui
 

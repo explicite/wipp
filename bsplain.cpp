@@ -14,7 +14,7 @@ BSplain::BSplain(QVector<double> &xr, QVector<double> &yr, int slices)
     for(int i = 0; i < xr.size() - 1; i++){
         if(xr[i] <= nSlice && xr[i+1] >= nSlice){
             nSlice += slice;
-            x.append(xr[i]);
+            x.append((xr[i]+xr[i+1])/2);
             y.append(yr[i]);
         }
     }
@@ -23,7 +23,6 @@ BSplain::BSplain(QVector<double> &xr, QVector<double> &yr, int slices)
 
     int n = x.size()-1;
     QVector<double> a(y);
-    //a.insert(a.begin(), y.begin(), y.end());
     QVector<double> b(n);
     QVector<double> d(n);
     QVector<double> h;
@@ -87,8 +86,8 @@ double BSplain::interpolate(double x)
 SplineSet BSplain::spline(double x)
 {
     SplineSet set = splineSets[0];
-    for(int i = 0; i < splineSets.size() - 1; i++){
-        double xi = splineSets[i].x;
+    for(int i = 1; i < splineSets.size() - 1; i++){
+        double xi = splineSets[i-1].x;
         double xii = splineSets[i+1].x;
 
         if(xi <= x && xii >= x){

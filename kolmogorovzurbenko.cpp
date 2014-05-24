@@ -1,13 +1,19 @@
 #include "kolmogorovzurbenko.h"
 
-QVector<double>* KolmogorovZurbenko::Filter(const QVector<double> *xs, const QVector<double> *ys, int k)
+QVector<double>* KolmogorovZurbenko::filtering()
 {
-    QVector<double> *tmp = new QVector<double>(*ys);
-    QVector<double> *ans = new QVector<double>(ys->size());
+    //TODO implement optimization for GWO algorithm
+    return nullptr;
+}
+
+QVector<double>* KolmogorovZurbenko::kz1d(int iterations)
+{
+    QVector<double> *tmp = new QVector<double>(*y);
+    QVector<double> *ans = new QVector<double>(y->size());
     ans->fill(0.0);
-    for(int x = 0; x < k; x++){
-        for(int i = 0; i < ys->size(); i++){
-            ans->operator [](i) = mavg1d(tmp, i, (5 / (k / (x + 1))));
+    for(int i = 0; i < iterations; i++){
+        for(int yi = 0; yi < y->size(); yi++){
+            ans->operator [](yi) = mavg1d(tmp, yi, (WINDOW / (iterations / (i + 1))));
         }
         ans->swap(*tmp);
     }
@@ -15,7 +21,51 @@ QVector<double>* KolmogorovZurbenko::Filter(const QVector<double> *xs, const QVe
     return ans;
 }
 
-double KolmogorovZurbenko::mavg1d(QVector<double> *v, int col, int w)
+QVector<double>* KolmogorovZurbenko::kza1d(int window, int iterations, int minimumWindowLength, double tolerance)
+{
+    int n,q, minWindowLength;
+    long qh, qt;
+    double m;
+
+    n = x->size();
+
+    QVector<double> *d = new QVector<double>(n);
+    QVector<double> *prime = new QVector<double>(n);
+    QVector<double> *ans = new QVector<double>(n);
+    QVector<double>* tmp = new QVector<double>(*y);
+
+    q = window;
+    minWindowLength = minimumWindowLength;
+
+    differenced(x, d, prime, q);
+    m = *std::max_element(std::begin(*d), std::end(*d));
+
+    for(int i = 0; i < iterations; i++){
+        for(int t = 0; t < n; t++){
+            if(abs(prime->operator [](t)) < tolerance){
+                qh = (int) floor(q*adaptive(d->operator [](t), m));
+                qt = (int) floor(q*adaptive(d->operator [](t), m));
+            } else if (abs(prime->operator [](t)) < 0){
+                qh = q;
+                qt = (int) floor(q*adaptive(d->operator [](t), m));
+            } else {
+                qh = (int) floor(q*adaptive(d->operator [](t), m));
+                qt = q;
+            }
+            qt = ((qt) < minWindowLength) ? minWindowLength : qt;
+            qh = ((qh) < minWindowLength) ? minWindowLength : qh;
+
+            qh = (qh > n-t-1) ? n-t-1 : qh;
+            qt = (qt > t) ? t : qt;
+            ans->operator [](t) = mavg1d(tmp, t-qt, t+qh+1);
+        }
+        ans->swap(*tmp);
+    }
+
+    return ans;
+}
+
+double KolmogorovZurbenko::mavg1d(const QVector<double> *v, int col, int w)
 {
     double s = 0.0;
     int startcol, endcol;
@@ -30,4 +80,39 @@ double KolmogorovZurbenko::mavg1d(QVector<double> *v, int col, int w)
     } else return 0.0;
 
     return s / ((double)(endcol - startcol));
+}
+
+void KolmogorovZurbenko::differenced(const QVector<double>* y, QVector<double>* d, QVector<double>* prime, int q)
+{
+    int n = y->size();
+
+    for (int i=0; i<q; i++) d->operator[](i) = abs(y->operator[](i+q) - y->operator[](0));
+    for (int i=q; i<n-q; i++) d->operator[](i) = abs(y->operator[](i+q) - y->operator[](i-q));
+    for (int i=n-q; i<n; i++) d->operator[](i) = abs(y->operator[](n-1) - y->operator[](i-q));
+
+    for(int i=0; i<n-1; i++) prime->operator[](i) = d->operator[](i+1)-d->operator[](i);
+    prime->operator[](n-1) = 0;
+}
+
+double KolmogorovZurbenko::adaptive(double d, double m)
+{
+    return( 1 - (d/m) );
+}
+
+//TODO so
+double KolmogorovZurbenko::error(double *params){
+    double tolerance = params[0];
+
+    QVector<double>* computed = kza1d(5, 20, 2, tolerance);
+
+    double value = 0;
+
+    for(int i = 0; i < index->size(); i++){
+        double indexValue = index->operator [](i);
+        double computedValue = computed->operator [](indexValue);
+        double measuredValue = y->operator [](indexValue);
+        value += abs(abs(computedValue)-abs(measuredValue));
+    }
+
+    return value;
 }

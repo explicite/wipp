@@ -28,7 +28,4 @@ public:
     double (*val)(double*);
 };
 
-
-
-double hanselSpittel(double*);
 #endif // FUNCTION_H

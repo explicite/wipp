@@ -67,13 +67,13 @@ void MainWindow::loadFile()
                 x = p.getJaw();
                 y = p.getForce();
 
-
-                yFiltered = KolmogorovZurbenko::Filter(p.getJaw(), p.getForce(), 20);
+                KolmogorovZurbenko kz(*p.getJaw(), *p.getForce(), 20);
+                yFiltered = kz.filtering();
 
                 QVector<double> ySpline;
                 BSplain splain(*p.getJaw(), *yFiltered, 200);
-                for(int i = 0; i < x->size() - 1 ; i++){
-                    ySpline.append(splain.interpolate(x->operator [](i)));
+                for(int s = 0; s < x->size() - 2; s++){
+                    ySpline.append(splain.interpolate(x->operator [](s)));
                 }
 
                 double maxX = *std::max_element(std::begin(*x), std::end(*x));
