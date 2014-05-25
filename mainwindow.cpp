@@ -68,7 +68,7 @@ void MainWindow::loadFile()
                 y = p.getForce();
 
                 KolmogorovZurbenko kz(*p.getJaw(), *p.getForce(), 20);
-                yFiltered = kz.filtering();
+                //yFiltered = kz.filtering();
 
                 QVector<double> ySpline;
                 BSplain splain(*p.getJaw(), *yFiltered, 200);

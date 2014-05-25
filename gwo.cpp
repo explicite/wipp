@@ -10,6 +10,21 @@ QVector<double> *GWO::max(unsigned int numberOfWolfs, unsigned int numberOfItera
     return GWO::optimize(MAX, numberOfWolfs, numberOfIterations);
 }
 
+QVector<double> *GWO::minKZ(unsigned int numberOfWolfs, unsigned int numberOfIterations, KolmogorovZurbenko *kolmogorovZurbenko)
+{
+    return GWO::optimizeKZ(MIN, numberOfWolfs, numberOfIterations, kolmogorovZurbenko);
+}
+
+QVector<double> *GWO::maxKZ(unsigned int numberOfWolfs, unsigned int numberOfIterations, KolmogorovZurbenko *kolmogorovZurbenko)
+{
+    return GWO::optimizeKZ(MAX, numberOfWolfs, numberOfIterations, kolmogorovZurbenko);
+}
+
+QVector<double> *GWO::optimizeKZ(enum Optimum optimum, unsigned int numberOfWolfs, unsigned int numberOfIterations, KolmogorovZurbenko *kolmogorovZurbenko)
+{
+    //TODO implementation
+    return nullptr;
+}
 
 QVector<double> *GWO::optimize(enum Optimum optimum, unsigned int numberOfWolfs, unsigned int numberOfIterations)
 {

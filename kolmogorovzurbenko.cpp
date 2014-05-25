@@ -1,11 +1,5 @@
 #include "kolmogorovzurbenko.h"
 
-QVector<double>* KolmogorovZurbenko::filtering()
-{
-    //TODO implement optimization for GWO algorithm
-    return nullptr;
-}
-
 QVector<double>* KolmogorovZurbenko::kz1d(int iterations)
 {
     QVector<double> *tmp = new QVector<double>(*y);
@@ -99,7 +93,6 @@ double KolmogorovZurbenko::adaptive(double d, double m)
     return( 1 - (d/m) );
 }
 
-//TODO so
 double KolmogorovZurbenko::error(double *params){
     double tolerance = params[0];
 

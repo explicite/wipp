@@ -2,7 +2,6 @@
 #define KOLMOGOROVZURBENKO_H
 #include <QVector>
 #include <math.h>
-#include "gwo.h"
 
 #define WINDOW 10
 #define NO_ITERATIONS 500
@@ -11,6 +10,7 @@
 class KolmogorovZurbenko
 {
 public:
+    KolmogorovZurbenko(){}
     KolmogorovZurbenko(QVector<double> x, QVector<double> y, int nodes) {
         this->x = &x;
         this->y = &y;
@@ -39,19 +39,17 @@ public:
         bounds[1] = 5;
     }
 
-    QVector<double>* filtering();
-
 private:
     const QVector<double> *x;
     const QVector<double> *y;
     const QVector<int> *index;
-    Function* function;
+
+    double error(double *params);
     QVector<double>* kz1d(int);
     QVector<double>* kza1d(int, int, int, double);
     static double mavg1d(const QVector<double>* , int, int);
     static void differenced(const QVector<double>*, QVector<double>*, QVector<double>*, int);
-    static double adaptive(double, double);
-    double error(double *params);
+    static double adaptive(double, double);    
 };
 
 
