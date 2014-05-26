@@ -39,16 +39,17 @@ public:
         bounds[1] = 5;
     }
 
+    QVector<double>* kz1d(int);
+    QVector<double>* kza1d(int, int, int, double);
+
 private:
     const QVector<double> *x;
     const QVector<double> *y;
     const QVector<int> *index;
 
     double error(double *params);
-    QVector<double>* kz1d(int);
-    QVector<double>* kza1d(int, int, int, double);
     static double mavg1d(const QVector<double>* , int, int);
-    static void differenced(const QVector<double>*, QVector<double>*, QVector<double>*, int);
+    void differenced(QVector<double>*, QVector<double>*, int);
     static double adaptive(double, double);    
 };
 

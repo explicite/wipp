@@ -21,21 +21,23 @@ QVector<double>* KolmogorovZurbenko::kza1d(int window, int iterations, int minim
     long qh, qt;
     double m;
 
-    n = x->size();
+    n = y->size();
 
     QVector<double> *d = new QVector<double>(n);
     QVector<double> *prime = new QVector<double>(n);
     QVector<double> *ans = new QVector<double>(n);
-    QVector<double>* tmp = new QVector<double>(*y);
+    QVector<double> *tmp = new QVector<double>(*y);
 
     q = window;
     minWindowLength = minimumWindowLength;
 
-    differenced(x, d, prime, q);
+    differenced(d, prime, q);
     m = *std::max_element(std::begin(*d), std::end(*d));
+
 
     for(int i = 0; i < iterations; i++){
         for(int t = 0; t < n; t++){
+            printf("%f\n", d->operator [](t));
             if(abs(prime->operator [](t)) < tolerance){
                 qh = (int) floor(q*adaptive(d->operator [](t), m));
                 qt = (int) floor(q*adaptive(d->operator [](t), m));
@@ -76,13 +78,13 @@ double KolmogorovZurbenko::mavg1d(const QVector<double> *v, int col, int w)
     return s / ((double)(endcol - startcol));
 }
 
-void KolmogorovZurbenko::differenced(const QVector<double>* y, QVector<double>* d, QVector<double>* prime, int q)
+void KolmogorovZurbenko::differenced(QVector<double>* d, QVector<double>* prime, int q)
 {
-    int n = y->size();
+    int n = x->size();
 
-    for (int i=0; i<q; i++) d->operator[](i) = abs(y->operator[](i+q) - y->operator[](0));
-    for (int i=q; i<n-q; i++) d->operator[](i) = abs(y->operator[](i+q) - y->operator[](i-q));
-    for (int i=n-q; i<n; i++) d->operator[](i) = abs(y->operator[](n-1) - y->operator[](i-q));
+    for (int i=0; i<q; i++) d->operator[](i) = abs(x->operator[](i+q) - x->operator[](0));
+    for (int i=q; i<n-q; i++) d->operator[](i) = abs(x->operator[](i+q) - x->operator[](i-q));
+    for (int i=n-q; i<n; i++) d->operator[](i) = abs(x->operator[](n-1) - x->operator[](i-q));
 
     for(int i=0; i<n-1; i++) prime->operator[](i) = d->operator[](i+1)-d->operator[](i);
     prime->operator[](n-1) = 0;
