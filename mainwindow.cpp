@@ -59,25 +59,17 @@ void MainWindow::loadFile()
                 cplot->addGraph();
                 cplot->addGraph();
                 cplot->addGraph();
-                cplot->addGraph();
+
                 cplot->graph(0)->setPen(QPen(Qt::blue));
                 cplot->graph(1)->setPen(QPen(Qt::yellow));
                 cplot->graph(2)->setPen(QPen(Qt::red));
-                cplot->graph(3)->setPen(QPen(Qt::cyan));
 
-                QVector<double> *x, *y, *yFiltered, *kza1d;
+                QVector<double> *x, *y, *yFiltered;
                 x = p.getJaw();
                 y = p.getForce();
 
-                KolmogorovZurbenko kz(*p.getJaw(), *p.getForce(), 20);
-                yFiltered = kz.kz1d(50);
-                kza1d = kz.kza1d(100, 2, 10, 0);
-
-                QVector<double> ySpline;
-                BSplain splain(*p.getJaw(), *yFiltered, 200);
-                for(int s = 0; s < x->size() - 2; s++){
-                    ySpline.append(splain.interpolate(x->operator [](s)));
-                }
+                KolmogorovZurbenko kz(*x, *y, 20);
+                yFiltered = &kz.kza1d(14, 20, 3, 1);
 
                 double maxX = *std::max_element(std::begin(*x), std::end(*x));
                 double maxY = *std::max_element(std::begin(*y), std::end(*y));
@@ -86,8 +78,6 @@ void MainWindow::loadFile()
 
                 cplot->graph(0)->setData(*x, *y);
                 cplot->graph(1)->setData(*x, *yFiltered);
-                cplot->graph(2)->setData(*x, ySpline);
-                cplot->graph(3)->setData(*x, *kza1d);
                 cplot->xAxis->setLabel("Jaw(mm)");
                 cplot->yAxis->setLabel("Force(kgf)");
                 cplot->xAxis->setRange(minX, maxX);

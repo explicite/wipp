@@ -11,9 +11,8 @@ class KolmogorovZurbenko
 {
 public:
     KolmogorovZurbenko(){}
-    KolmogorovZurbenko(QVector<double> x, QVector<double> y, int nodes) {
-        this->x = &x;
-        this->y = &y;
+    KolmogorovZurbenko(const QVector<double> &x, const QVector<double> &y, int nodes)
+        :x(QVector<double>(x)), y(QVector<double>(y)){
 
         double refMin = *std::min_element(std::begin(x), std::end(x));
         double refMax = *std::max_element(std::begin(x), std::end(x));
@@ -33,24 +32,22 @@ public:
         index.append(x.last());
 
         this->index = &index;
-
-        double *bounds = (double*) malloc(2*sizeof(double));
-        bounds[0] = 0.1;
-        bounds[1] = 5;
     }
 
-    QVector<double>* kz1d(int);
-    QVector<double>* kza1d(int, int, int, double);
+    QVector<double> kz1d(int);
+    QVector<double> kza1d(int, int, int, double);
 
 private:
-    const QVector<double> *x;
-    const QVector<double> *y;
-    const QVector<int> *index;
+    const QVector<double> x;
+    const QVector<double> y;
+    const QVector<int>* index;
 
     double error(double *params);
-    static double mavg1d(const QVector<double>* , int, int);
+    static double mavg1d(const QVector<double>& , int, int);
+    static double mavga1d(const QVector<double>& , int, int);
     void differenced(QVector<double>*, QVector<double>*, int);
     static double adaptive(double, double);    
+    static bool isFinite(const double x);
 };
 
 
